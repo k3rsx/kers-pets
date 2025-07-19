@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Manager</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        #petContainer {
+            position: fixed;
+            top: 36%;
+            width: 24%;
+            background: rgba(15, 15, 15, 0.95);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            display: none;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        #petContainer.align-left {
+            left: 2%;
+        }
+
+        #petContainer.align-center {
+            left: 38%;
+        }
+
+        #petContainer.align-right {
+            right: 2%;
+        }
+
+        #petContainer.show {
+            display: block;
+            animation: slideInSmooth 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        @keyframes slideInSmooth {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.8), rgba(30, 30, 30, 0.6));
+            padding: 18px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h2 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-btn {
+            background: rgba(220, 53, 69, 0.15);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: rgba(220, 53, 69, 0.9);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .close-btn:hover {
+            background: rgba(220, 53, 69, 0.25);
+            border-color: rgba(220, 53, 69, 0.5);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .current-pet {
+            padding: 24px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(25, 25, 25, 0.4), rgba(35, 35, 35, 0.2));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pet-avatar {
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 16px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pet-avatar:hover {
+            transform: scale(1.02);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .pet-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 14px;
+        }
+
+        .pet-avatar.no-pet {
+            font-size: 32px;
+            opacity: 0.6;
+        }
+
+        .pet-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .pet-position {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .pet-instruction {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        .controls {
+            padding: 22px;
+        }
+
+        .control-section {
+            margin-bottom: 20px;
+        }
+
+        .control-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+
+        .position-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            flex: 1;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), rgba(59, 130, 246, 0.2));
+            border-color: rgba(59, 130, 246, 0.6);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-effect {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-effect:hover {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.35), rgba(34, 197, 94, 0.2));
+            border-color: rgba(34, 197, 94, 0.5);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.2);
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-refresh:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(59, 130, 246, 0.2));
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .notification {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: rgba(10, 10, 10, 0.95);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transform: translateX(400px);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 10000;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-color: rgba(220, 53, 69, 0.4);
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(10, 10, 10, 0.95));
+            box-shadow: 0 10px 30px rgba(220, 53, 69, 0.2);
+        }
+
+        .notification.success {
+            border-color: rgba(34, 197, 94, 0.4);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(10, 10, 10, 0.95));
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            #petContainer {
+                width: 92%;
+                left: 4% !important;
+                right: auto !important;
+            }
+            
+            #petContainer.align-center {
+                left: 4% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="petContainer" class="align-left" style="display: none;">
+        <div class="header">
+            <h2 id="petManagerTitle">🐾 Pet Manager</h2>
+            <div class="close-btn" id="closeBtn">×</div>
+        </div>
+
+        <div class="current-pet">
+            <div class="pet-avatar no-pet" id="currentPetAvatar">🐾</div>
+            <div class="pet-name" id="currentPetName">No pet</div>
+            <div class="pet-instruction" id="currentPetStatus">Use a pet first</div>
+        </div>
+
+        <div class="controls">
+            <div class="control-section">
+                <div class="section-title" id="positionChangeTitle">Change Position</div>
+                <div class="position-buttons">
+                    <button class="btn active" id="leftBtn">← <span id="leftText">Left</span></button>
+                    <button class="btn" id="rightBtn"><span id="rightText">Right</span> →</button>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <div class="section-title" id="petActionsTitle">Pet Actions</div>
+                <div class="action-buttons">
+                    <button class="btn btn-effect" id="effectBtn">✨ <span id="effectText">Effect</span></button>
+                    <button class="btn btn-refresh" id="refreshBtn">🔄 <span id="refreshText">Refresh</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification" style="display: none;">
+        <span id="notificationText"></span>
+    </div>
+
+    <script>
+        class PetManager {
+            constructor() {
+                this.currentPetName = null;
+                this.currentPosition = 'left';
+                this.cooldowns = { effect: false, refresh: false };
+                this.isVisible = false;
+                this.config = null;
+                this.strings = {};
+                this.currentLanguage = 'tr';
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                document.getElementById('petContainer').style.display = 'none';
+            }
+
+            bindEvents() {
+                document.getElementById('leftBtn').addEventListener('click', () => this.updatePosition('left'));
+                document.getElementById('rightBtn').addEventListener('click', () => this.updatePosition('right'));
+                document.getElementById('effectBtn').addEventListener('click', () => this.triggerEffect());
+                document.getElementById('refreshBtn').addEventListener('click', () => this.refreshPet());
+                document.getElementById('closeBtn').addEventListener('click', () => this.hideMenu());
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.isVisible) {
+                        this.hideMenu();
+                    }
+                });
+            }
+
+            updateLanguage(strings, locale) {
+                this.strings = strings;
+                this.currentLanguage = locale;
+                
+                if (!this.strings) return;
+                
+                document.getElementById('petManagerTitle').innerHTML = '🐾 ' + (this.strings.pet_manager || 'Pet Manager');
+                document.getElementById('positionChangeTitle').textContent = this.strings.position_change || 'Position Change';
+                document.getElementById('petActionsTitle').textContent = this.strings.pet_actions || 'Pet Actions';
+                document.getElementById('leftText').textContent = this.strings.left || 'Left';
+                document.getElementById('rightText').textContent = this.strings.right || 'Right';
+                document.getElementById('effectText').textContent = this.strings.effect || 'Effect';
+                document.getElementById('refreshText').textContent = this.strings.refresh || 'Refresh';
+                
+                if (!this.currentPetName) {
+                    document.getElementById('currentPetName').textContent = this.strings.no_pet_available || 'No pet';
+                    document.getElementById('currentPetStatus').textContent = this.strings.use_pet_first || 'Use a pet first';
+                } else {
+                    this.updateCurrentPetDisplay();
+                }
+            }
+
+            showMenu(petName = null, position = 'left') {
+                this.isVisible = true;
+                this.currentPetName = petName;
+                this.currentPosition = position;
+                
+                const container = document.getElementById('petContainer');
+                container.style.display = 'block';
+                container.classList.add('show');
+                
+                this.updateCurrentPetDisplay();
+                this.updatePositionButtons();
+            }
+
+            hideMenu() {
+                this.isVisible = false;
+                const container = document.getElementById('petContainer');
+                container.classList.remove('show');
+                container.style.display = 'none';
+                
+                this.sendToGame('close', {});
+            }
+
+            updateCurrentPetDisplay() {
+                const nameEl = document.getElementById('currentPetName');
+                const avatarEl = document.getElementById('currentPetAvatar');
+                const statusEl = document.getElementById('currentPetStatus');
+
+                if (this.currentPetName) {
+                    const displayName = this.getPetDisplayName(this.currentPetName);
+                    nameEl.textContent = displayName;
+                    
+                    avatarEl.className = 'pet-avatar';
+                    avatarEl.innerHTML = `<img src="img/${this.currentPetName}.png" alt="${this.currentPetName}">`;
+                    
+                    const leftShoulder = this.strings.left_shoulder || 'Left shoulder';
+                    const rightShoulder = this.strings.right_shoulder || 'Right shoulder';
+                    const positionStatus = this.strings.position_status || 'Position';
+                    const positionText = this.currentPosition === 'left' ? leftShoulder : rightShoulder;
+                    statusEl.textContent = `${positionStatus}: ${positionText}`;
+                    statusEl.className = 'pet-position';
+                } else {
+                    nameEl.textContent = this.strings.no_pet_available || 'No pet';
+                    avatarEl.className = 'pet-avatar no-pet';
+                    avatarEl.innerHTML = '🐾';
+                    statusEl.textContent = this.strings.use_pet_first || 'Use a pet first';
+                    statusEl.className = 'pet-instruction';
+                }
+            }
+
+            getPetDisplayName(petKey) {
+                const petNamesTr = {
+                    'shark_boi': 'Shark Boy',
+                    'monkey_punk': 'Punk Monkey',
+                    'monky': 'Monkey', 
+                    'fox': 'Fox',
+                    'questing_mouse': 'Quest Mouse',
+                    'armored_cat': 'Armored Cat',
+                    'hollow_knight': 'Hollow Knight',
+                    'knight_cat': 'Knight Cat',
+                    'dino': 'Dinosaur',
+                    'dino_student': 'Student Dino',
+                    'pig_angel': 'Angel Pig',
+                    'mickey_mouse': 'Mickey Mouse',
+                    'blossom': 'Blossom',
+                    'buttercup': 'Buttercup',
+                    'bubbles': 'Bubbles'
+                };
+                
+                const petNamesEn = {
+                    'shark_boi': 'Shark Boy',
+                    'monkey_punk': 'Punk Monkey',
+                    'monky': 'Monkey', 
+                    'fox': 'Fox',
+                    'questing_mouse': 'Quest Mouse',
+                    'armored_cat': 'Armored Cat',
+                    'hollow_knight': 'Hollow Knight',
+                    'knight_cat': 'Knight Cat',
+                    'dino': 'Dinosaur',
+                    'dino_student': 'Student Dino',
+                    'pig_angel': 'Angel Pig',
+                    'mickey_mouse': 'Mickey Mouse',
+                    'blossom': 'Blossom',
+                    'buttercup': 'Buttercup',
+                    'bubbles': 'Bubbles'
+                };
+                
+                if (this.currentLanguage === 'en') {
+                    return petNamesEn[petKey] || petKey.replace('_', ' ').toUpperCase();
+                } else {
+                    return petNamesTr[petKey] || petKey.replace('_', ' ').toUpperCase();
+                }
+            }
+
+            updatePositionButtons() {
+                document.querySelectorAll('.position-buttons .btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById(this.currentPosition + 'Btn').classList.add('active');
+            }
+
+            updatePosition(position) {
+                if (this.currentPosition === position || !this.currentPetName) {
+                    if (!this.currentPetName) {
+                        this.showNotification(this.strings.use_pet_first || 'Use a pet first!', 'error');
+                    }
+                    return;
+                }
+                
+                this.currentPosition = position;
+                this.updatePositionButtons();
+                this.updateCurrentPetDisplay();
+                
+                const positionText = position === 'left' ? (this.strings.left || 'Left') : (this.strings.right || 'Right');
+                this.showNotification(`${this.strings.position_status || 'Position'}: ${positionText}`, 'success');
+
+                this.sendToGame('updatePosition', { position: position });
+            }
+
+            triggerEffect() {
+                if (!this.currentPetName) {
+                    this.showNotification(this.strings.use_pet_first || 'Use a pet first!', 'error');
+                    return;
+                }
+
+                if (this.cooldowns.effect) {
+                    this.showNotification(this.strings.cooldown || 'Wait for cooldown', 'error');
+                    return;
+                }
+
+                this.showNotification(`${this.strings.effect || 'Effect'}! ✨`, 'success');
+                this.startCooldown('effect', 2500);
+
+                this.sendToGame('petEffect', {});
+            }
+
+            refreshPet() {
+                if (!this.currentPetName) {
+                    this.showNotification(this.strings.use_pet_first || 'Use a pet first!', 'error');
+                    return;
+                }
+
+                if (this.cooldowns.refresh) {
+                    this.showNotification(this.strings.cooldown || 'Wait for cooldown', 'error');
+                    return;
+                }
+
+                this.showNotification(`${this.strings.refresh || 'Refresh'}! 🔄`, 'success');
+                this.startCooldown('refresh', 5000);
+
+                this.sendToGame('refreshPet', {});
+            }
+
+            startCooldown(type, duration) {
+                this.cooldowns[type] = true;
+                const button = document.getElementById(type + 'Btn');
+                button.disabled = true;
+                
+                let timeLeft = Math.ceil(duration / 1000);
+                const originalText = button.innerHTML;
+                
+                const updateTimer = () => {
+                    if (timeLeft > 0) {
+                        button.innerHTML = `⏱️ ${timeLeft}s`;
+                        timeLeft--;
+                        setTimeout(updateTimer, 1000);
+                    } else {
+                        this.cooldowns[type] = false;
+                        button.disabled = false;
+                        button.innerHTML = originalText;
+                    }
+                };
+                
+                updateTimer();
+            }
+
+            sendToGame(action, data = {}) {
+                $.post(`https://kers-pets/${action}`, JSON.stringify(data));
+            }
+
+            showNotification(message, type = 'success') {
+                const notification = document.getElementById('notification');
+                const text = document.getElementById('notificationText');
+                
+                text.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.style.display = 'block';
+                setTimeout(() => notification.classList.add('show'), 10);
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.style.display = 'none', 400);
+                }, 3000);
+            }
+
+            setAlignment(align) {
+                const container = document.getElementById('petContainer');
+                container.className = container.className.replace(/align-\w+/, '') + ` align-${align}`;
+            }
+
+            updatePet(petName, position) {
+                this.currentPetName = petName;
+                this.currentPosition = position;
+                if (this.isVisible) {
+                    this.updateCurrentPetDisplay();
+                    this.updatePositionButtons();
+                }
+            }
+        }
+
+        let petManager;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            petManager = new PetManager();
+        });
+
+        window.addEventListener('message', (event) => {
+            if (!petManager) return;
+
+            const data = event.data;
+            
+            switch(data.action) {
+                case 'config':
+                    if (data.menuAlign) {
+                        petManager.setAlignment(data.menuAlign);
+                    }
+                    if (data.locales && data.locale) {
+                        petManager.updateLanguage(data.locales, data.locale);
+                    }
+                    petManager.config = data;
+                    break;
+                    
+                case 'show':
+                    if (data.locales && data.locale) {
+                        petManager.updateLanguage(data.locales, data.locale);
+                    }
+                    petManager.showMenu(data.petName, data.position || 'left');
+                    break;
+                    
+                case 'updatePet':
+                    petManager.updatePet(data.petName, data.position);
+                    break;
+                    
+                case 'hide':
+                    petManager.hideMenu();
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
