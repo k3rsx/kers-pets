@@ -8,6 +8,18 @@ Original Creator: **ErdemGoren** - [Discord](https://discord.com/users/405469149
 
 A pet system for FiveM where pets sit on your shoulder. Has some nice effects and a clean menu.
 
+
+##Images
+<img width="587" height="566" alt="image" src="https://github.com/user-attachments/assets/d5414f77-2109-44c0-9603-2903e2442259" />
+<img width="456" height="551" alt="image" src="https://github.com/user-attachments/assets/a1864e82-ad7f-420c-9039-9d6e3fe8574b" />
+<img width="387" height="494" alt="image" src="https://github.com/user-attachments/assets/abf38f95-c7e4-40d6-bc6e-64fdd7560f4c" />
+<img width="340" height="514" alt="image" src="https://github.com/user-attachments/assets/36923ff1-b603-42b7-a622-a51d7e45befe" />
+
+
+
+## Video
+https://streamable.com/hiylz1
+
 ## Pets Available
 
 - shark_boi
