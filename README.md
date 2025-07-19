@@ -67,7 +67,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "shark_boi.png",
     }
@@ -77,7 +77,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "monkey_punk.png",
     }
@@ -87,7 +87,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "monky.png",
     }
@@ -97,7 +97,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "fox.png",
     }
@@ -107,7 +107,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "questing_mouse.png",
     }
@@ -117,7 +117,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "armored_cat.png",
     }
@@ -127,7 +127,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "hollow_knight.png",
     }
@@ -137,7 +137,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "knight_cat.png",
     }
@@ -147,7 +147,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "dino.png",
     }
@@ -157,7 +157,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "dino_student.png",
     }
@@ -167,7 +167,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "pig_angel.png",
     }
@@ -177,7 +177,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "mickey_mouse.png",
     }
@@ -187,7 +187,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "blossom.png",
     }
@@ -197,7 +197,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Bana pahalı görünüyor o.o",
+    description = "",
     client = {
         image = "buttercup.png",
     }
@@ -207,7 +207,7 @@ https://streamable.com/hiylz1
     weight = 0,
     stack = true,
     close = true,
-    description = "Omuzlarının üstünde sana güç veren yoldaşın.",
+    description = "",
     client = {
         image = "bubbles.png",
     }
